@@ -2,7 +2,7 @@ package lab;
 
 public class StringLab {
 
-//	1. Write code to check a String is palindrome or not?
+//    1. Write code to check a String is palindrome or not?
 
 // 2. Write a method which will remove any given character from a String?
 
@@ -19,9 +19,8 @@ public class StringLab {
 // 8. How to convert numeric String to int in
 
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+    }
 
 }
