@@ -2,8 +2,21 @@ package lab;
 
 public class StringLab {
 
-//    1. Write code to check a String is palindrome or not?
-
+    /**
+     * Write code to check a String is palindrome or not?
+     * 
+     * @param str
+     * @return
+     */
+    public static boolean isPalindrome(String str) {
+        StringBuilder strBuilder = new StringBuilder(str);
+        String reverseStr = strBuilder.reverse().toString();
+        System.out.println("Reverse string is : " + reverseStr);
+        if(reverseStr.equals(str)) {
+            return true;
+        }
+        return false;
+    }
 // 2. Write a method which will remove any given character from a String?
 
 // 3. Print all permutation of String both iterative and Recursive way?
@@ -20,7 +33,12 @@ public class StringLab {
 
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
-    }
+        String orginalStr = "hello";
 
+        if(isPalindrome(orginalStr)) {
+            System.out.println(orginalStr + " is palindrome");
+        } else {
+            System.out.println(orginalStr + " is not palindrome");
+        }
+    }
 }
