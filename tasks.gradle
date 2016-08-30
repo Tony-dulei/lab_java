@@ -1,0 +1,21 @@
+/**
+ * Wrapper task to generate gradlew executables, which will use the Gradle version written here.
+ * Need to be run only when Gradle version changes
+ */
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
+
+/**
+ * Generates myBatis mappings and classes
+ */
+task mybatis << {
+    exec {commandLine 'java', '-classpath',
+      System.env['OS'] == 'Windows_NT' ? 'build/classes/main/;lib/mybatis-generator-core-1.3.2.jar' :
+        'build/classes/main:lib/mybatis-generator-core-1.3.2.jar',
+      'org.mybatis.generator.api.ShellRunner',
+      '-configfile',
+      'generatorConfig.xml',
+      '-overwrite'
+    }
+}
