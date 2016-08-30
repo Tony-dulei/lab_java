@@ -13,16 +13,34 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.binary.Hex;
 
+/**
+ * The class is used to test how HmacSha works.
+ * 
+ * @author dulei
+ *
+ */
 public class HmacSha {
 
-    private static String toHmacHash(String data, String secretKey, String hashType) {
+    public static final String UTF_8 = "UTF-8";
+    public static final String HAMCSHA256 = "HmacSHA256";
+    public static final String HMACSHA384 = "HmacSHA384";
+    public static final String HMACSHA512 = "HmacSHA512";
+
+    /**
+     * The method is used to generate HMAC with given key and algorithm
+     * 
+     * @param data
+     * @param secretKey
+     * @param hashType
+     * @return
+     */
+    private static String generateHmac(String data, String secretKey, String hashType) {
         String hash = null;
         try {
-            // calculate HMAC hash
-            Key key = new SecretKeySpec(secretKey.getBytes("UTF-8"), hashType);
+            Key key = new SecretKeySpec(secretKey.getBytes(UTF_8), hashType);
             Mac mac = Mac.getInstance(key.getAlgorithm());
             mac.init(key);
-            byte[] byteArr = mac.doFinal(data.getBytes("UTF-8"));
+            byte[] byteArr = mac.doFinal(data.getBytes(UTF_8));
             System.out.println("Output length " + hashType + " is  : " + byteArr.length * 8);
             hash = Hex.encodeHexString(byteArr);
 
@@ -38,39 +56,53 @@ public class HmacSha {
         return hash;
     }
 
+    /**
+     * Key generator is used to generate secret key based on given algor
+     * 
+     * @param keyType
+     * @param keySize
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
+    public static byte[] keyGenerator(String algorithm, int keySize)
+            throws NoSuchAlgorithmException {
+        KeyGenerator generatorHmacSHA = KeyGenerator.getInstance(algorithm);
+        generatorHmacSHA.init(keySize);
+        SecretKey keyHmacSHA256 = generatorHmacSHA.generateKey();
+        return keyHmacSHA256.getEncoded();
+    }
+
     public static void main(String[] args)
             throws NoSuchAlgorithmException,
             UnsupportedEncodingException {
         String str = "Hi there hello world";
-        System.out.println("Length of str is : " + str.getBytes("UTF-8").length);
+        System.out.println("Length of str is : " + str.getBytes(UTF_8).length);
         System.out.println("");
 
-        KeyGenerator generatorHmacSHA256 = KeyGenerator.getInstance("HmacSHA256");
-        generatorHmacSHA256.init(512);
-        SecretKey keyHmacSHA256 = generatorHmacSHA256.generateKey();
+        //HMACSHA256
+        byte[] keyHmacSHA256 = keyGenerator(HAMCSHA256, 256);
+        String hashStr = generateHmac(str, DatatypeConverter.printHexBinary(keyHmacSHA256), HAMCSHA256);
 
-        System.out.println("Key Size of keyHmacSHA256 is : " + keyHmacSHA256.getEncoded().length * 8);
-        System.out.println("Key of keyHmacSHA256 is      : " + DatatypeConverter.printHexBinary(keyHmacSHA256.getEncoded()));
-
-        String hashStr = toHmacHash(str, DatatypeConverter.printHexBinary(keyHmacSHA256.getEncoded()), "HmacSHA256");
+        System.out.println("Key Size of keyHmacSHA256 is : " + keyHmacSHA256.length * 8);
+        System.out.println("Key of keyHmacSHA256 is      : " + DatatypeConverter.printHexBinary(keyHmacSHA256));
         System.out.println("Hash of keyHmacSHA256 is     : " + hashStr);
         System.out.println("");
 
-        KeyGenerator generatorHmacSHA384 = KeyGenerator.getInstance("HmacSHA384");
-        generatorHmacSHA384.init(1024);
-        SecretKey keyHmacSHA384 = generatorHmacSHA384.generateKey();
-        System.out.println("Key Size of keyHmacSHA384 is : " + keyHmacSHA384.getEncoded().length * 8);
-        System.out.println("Key of keyHmacSHA384 is      : " + DatatypeConverter.printHexBinary(keyHmacSHA384.getEncoded()));
-        String hashStrHmacSHA384 = toHmacHash(str, DatatypeConverter.printHexBinary(keyHmacSHA384.getEncoded()), "HmacSHA384");
+        //HMACSHA384
+        byte[] keyHmacSHA384 = keyGenerator(HMACSHA384, 256);
+        String hashStrHmacSHA384 = generateHmac(str, DatatypeConverter.printHexBinary(keyHmacSHA384), HMACSHA384);
+
+        System.out.println("Key Size of keyHmacSHA384 is : " + keyHmacSHA384.length * 8);
+        System.out.println("Key of keyHmacSHA384 is      : " + DatatypeConverter.printHexBinary(keyHmacSHA384));
         System.out.println("Hash of keyHmacSHA384 is     : " + hashStrHmacSHA384);
         System.out.println("");
 
-        KeyGenerator generatorHmacSHA512 = KeyGenerator.getInstance("HmacSHA512");
-        generatorHmacSHA512.init(1024);
-        SecretKey keyHmacSHA512 = generatorHmacSHA512.generateKey();
-        System.out.println("Key Size of keyHmacSHA512 is : " + keyHmacSHA512.getEncoded().length * 8);
-        System.out.println("Key of keyHmacSHA512 is      : " + DatatypeConverter.printHexBinary(keyHmacSHA512.getEncoded()));
-        String hashStrHmacSHA512 = toHmacHash(str, DatatypeConverter.printHexBinary(keyHmacSHA512.getEncoded()), "HmacSHA512");
+        //HMACSHA512
+        byte[] keyHmacSHA512 = keyGenerator(HMACSHA512, 256);
+        String hashStrHmacSHA512 = generateHmac(str, DatatypeConverter.printHexBinary(keyHmacSHA512), HMACSHA512);
+
+        System.out.println("Key Size of keyHmacSHA512 is : " + keyHmacSHA512.length * 8);
+        System.out.println("Key of keyHmacSHA512 is      : " + DatatypeConverter.printHexBinary(keyHmacSHA512));
         System.out.println("Hash of keyHmacSHA512 is     : " + hashStrHmacSHA512);
 
     }
