@@ -104,7 +104,6 @@ public class HmacSha {
         System.out.println("Key Size of keyHmacSHA512 is : " + keyHmacSHA512.length * 8);
         System.out.println("Key of keyHmacSHA512 is      : " + DatatypeConverter.printHexBinary(keyHmacSHA512));
         System.out.println("Hash of keyHmacSHA512 is     : " + hashStrHmacSHA512);
-
     }
 
 }
